@@ -74,3 +74,55 @@ function createHeader() {
 const header = createHeader();
 document.body.prepend(header);
 
+function createCard(cardData) {
+  const cardItem = document.createElement('li');
+  cardItem.classList.add('cards__item');
+
+  const cardButton = document.createElement('button');
+  cardButton.classList.add('card');
+  cardButton.type = 'button';
+
+  const cardBack = document.createElement('span');
+  cardBack.classList.add('card__back');
+
+  const cardBackImg = document.createElement('img');
+  cardBackImg.src = './assets/images/bg-card.png';
+  cardBackImg.alt = '';
+
+  cardBack.append(cardBackImg);
+
+  const cardFront = document.createElement('span');
+  cardFront.classList.add('card__front');
+
+  const cardFrontImg = document.createElement('img');
+  cardFrontImg.src = cardData.image;
+  cardFrontImg.alt = cardData.alt;
+
+  cardFront.append(cardFrontImg);
+
+  cardButton.append(cardBack, cardFront);
+  cardItem.append(cardButton);
+
+  return cardItem;
+}
+
+
+function createMain(cardsData) {
+  const main = document.createElement('main');
+  main.classList.add('main');
+
+  const cardsList = document.createElement('ul');
+  cardsList.classList.add('cards');
+
+  cardsData.forEach((cardData) => {
+    const card = createCard(cardData);
+    cardsList.append(card);
+  });
+
+  main.append(cardsList);
+
+  return main;
+}
+
+const main = createMain(cardsData);
+document.body.append(main);
