@@ -1,4 +1,4 @@
-console.log('hi');
+import { cardsData } from './cards-data.js';
 
 function createHeader() {
   const header = document.createElement('header');
