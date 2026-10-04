@@ -57,22 +57,15 @@ function createHeader() {
   counterPairsWrapper.append(
     counterPairsLabel,
     counterPairValue,
-    counterPairTotal
+    counterPairTotal,
   );
 
   headerStatsContainer.append(counterMovesWrapper, counterPairsWrapper);
 
-  header.append(
-    buttonsHeaderActionsWrapper,
-    headerTitle,
-    headerStatsContainer
-  );
+  header.append(buttonsHeaderActionsWrapper, headerTitle, headerStatsContainer);
 
   return header;
 }
-
-const header = createHeader();
-document.body.prepend(header);
 
 function createCard(cardData) {
   const cardItem = document.createElement('li');
@@ -106,7 +99,6 @@ function createCard(cardData) {
   return cardItem;
 }
 
-
 function createMain(cardsData) {
   const main = document.createElement('main');
   main.classList.add('main');
@@ -114,15 +106,31 @@ function createMain(cardsData) {
   const cardsList = document.createElement('ul');
   cardsList.classList.add('cards');
 
+  main.append(cardsList);
+
   cardsData.forEach((cardData) => {
     const card = createCard(cardData);
     cardsList.append(card);
   });
 
-  main.append(cardsList);
-
   return main;
 }
 
-const main = createMain(cardsData);
+function shuffleCards(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+
+  return arr;
+}
+
+const doubledCards = [...cardsData, ...cardsData];
+const shuffledCards = shuffleCards(doubledCards);
+
+const header = createHeader();
+const main = createMain(shuffledCards);
+
+document.body.prepend(header);
 document.body.append(main);
