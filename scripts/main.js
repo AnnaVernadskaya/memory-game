@@ -74,6 +74,7 @@ function createCard(cardData) {
   const cardButton = document.createElement('button');
   cardButton.classList.add('card');
   cardButton.type = 'button';
+  cardButton.dataset.id = cardData.id;
 
   const cardBack = document.createElement('span');
   cardBack.classList.add('card__back');
@@ -95,6 +96,13 @@ function createCard(cardData) {
 
   cardButton.append(cardBack, cardFront);
   cardItem.append(cardButton);
+
+
+  function openCard() {
+    cardButton.classList.add('card--open');
+  }
+
+  cardButton.addEventListener('click', openCard);
 
   return cardItem;
 }

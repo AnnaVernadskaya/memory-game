@@ -381,6 +381,13 @@ body {
   display: none;
 }
 
+.card--open .card__back {
+  display: none;
+}
+
+.card--open .card__front {
+  display: flex;
+}
 /* FOOTER */
 
 .footer {
