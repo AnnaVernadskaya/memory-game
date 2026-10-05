@@ -140,9 +140,14 @@ function checkPair() {
       state.secondCard = null;
     }, 1000);
   } else {
-    state.firstCard = null;
-    state.secondCard = null;
-  }
+    state.matchedPairs += 1;
+
+  const pairsCounter = document.querySelector('.pair-counter');
+  pairsCounter.textContent = state.matchedPairs;
+
+  state.firstCard = null;
+  state.secondCard = null;
+}
 }
 
 function createMain(cardsData) {
