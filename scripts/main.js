@@ -118,6 +118,8 @@ function createCard(cardData) {
       state.secondCard = cardButton;
       state.moves += 1;
 
+      checkPair();
+
       const movesCounter = document.querySelector('.move-counter');
       movesCounter.textContent = state.moves;
     }
@@ -126,6 +128,21 @@ function createCard(cardData) {
   cardButton.addEventListener('click', openCard);
 
   return cardItem;
+}
+
+function checkPair() {
+  if (state.firstCard.dataset.id !== state.secondCard.dataset.id) {
+    setTimeout(() => {
+      state.firstCard.classList.remove('card--open');
+      state.secondCard.classList.remove('card--open');
+
+      state.firstCard = null;
+      state.secondCard = null;
+    }, 1000);
+  } else {
+    state.firstCard = null;
+    state.secondCard = null;
+  }
 }
 
 function createMain(cardsData) {
