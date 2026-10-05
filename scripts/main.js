@@ -1,5 +1,12 @@
 import { cardsData } from './cards-data.js';
 
+const state = {
+  firstCard: null,
+  secondCard: null,
+  moves: 0,
+  matchedPairs: 0,
+};
+
 function createHeader() {
   const header = document.createElement('header');
   header.classList.add('header');
@@ -97,9 +104,19 @@ function createCard(cardData) {
   cardButton.append(cardBack, cardFront);
   cardItem.append(cardButton);
 
-
   function openCard() {
+    if (cardButton.classList.contains('card--open')) {
+      return;
+    } else if (state.firstCard !== null && state.secondCard !== null) {
+      return;
+    }
+
     cardButton.classList.add('card--open');
+    if (state.firstCard === null) {
+      state.firstCard = cardButton;
+    } else {
+      state.secondCard = cardButton;
+    }
   }
 
   cardButton.addEventListener('click', openCard);
