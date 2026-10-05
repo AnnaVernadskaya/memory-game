@@ -116,6 +116,10 @@ function createCard(cardData) {
       state.firstCard = cardButton;
     } else {
       state.secondCard = cardButton;
+      state.moves += 1;
+
+      const movesCounter = document.querySelector('.move-counter');
+      movesCounter.textContent = state.moves;
     }
   }
 
