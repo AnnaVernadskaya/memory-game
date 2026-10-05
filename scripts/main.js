@@ -142,12 +142,12 @@ function checkPair() {
   } else {
     state.matchedPairs += 1;
 
-  const pairsCounter = document.querySelector('.pair-counter');
-  pairsCounter.textContent = state.matchedPairs;
+    const pairsCounter = document.querySelector('.pair-counter');
+    pairsCounter.textContent = state.matchedPairs;
 
-  state.firstCard = null;
-  state.secondCard = null;
-}
+    state.firstCard = null;
+    state.secondCard = null;
+  }
 }
 
 function createMain(cardsData) {
@@ -180,8 +180,25 @@ function shuffleCards(arr) {
 const doubledCards = [...cardsData, ...cardsData];
 const shuffledCards = shuffleCards(doubledCards);
 
+function createFooter() {
+  const footer = document.createElement('footer');
+  footer.classList.add('footer');
+
+  const footerLink = document.createElement('a');
+  footerLink.classList.add('footer-link');
+  footerLink.href = 'https://github.com/AnnaVernadskaya';
+  footerLink.target = '_blank';
+  footerLink.rel = 'noopener noreferrer';
+  footerLink.textContent = '© 2026 Anna Vernadskaya';
+
+  footer.append(footerLink);
+
+  return footer;
+}
+
 const header = createHeader();
 const main = createMain(shuffledCards);
+const footer = createFooter();
 
 document.body.prepend(header);
-document.body.append(main);
+document.body.append(main, footer);
