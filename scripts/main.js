@@ -5,6 +5,7 @@ const state = {
   secondCard: null,
   moves: 0,
   matchedPairs: 0,
+  closeTimerId: null,
 };
 
 function createHeader() {
@@ -18,6 +19,8 @@ function createHeader() {
   buttonNewGame.classList.add('button-new-game');
   buttonNewGame.type = 'button';
   buttonNewGame.textContent = 'New Game';
+
+  buttonNewGame.addEventListener('click', startNewGame);
 
   const buttonLeaders = document.createElement('button');
   buttonLeaders.classList.add('button-leaders');
@@ -138,6 +141,7 @@ function checkPair() {
 
       state.firstCard = null;
       state.secondCard = null;
+      state.closeTimerId = null;
     }, 1000);
   } else {
     state.matchedPairs += 1;
@@ -267,7 +271,29 @@ function createWinContent() {
   newGameButton.type = 'button';
   newGameButton.textContent = 'New Game';
 
+  newGameButton.addEventListener('click', startNewGame);
+
   winContent.append(title, result, newGameButton);
 
   return winContent;
+}
+
+function startNewGame() {
+  clearTimeout(state.closeTimerId);
+  state.closeTimerId = null;
+
+  state.firstCard = null;
+  state.secondCard = null;
+  state.moves = 0;
+  state.matchedPairs = 0;
+
+  document.querySelector('.move-counter').textContent = '0';
+  document.querySelector('.pair-counter').textContent = '0';
+
+  const newDeck = shuffleCards([...cardsData, ...cardsData]);
+  const newMain = createMain(newDeck);
+
+  document.querySelector('.main').replaceWith(newMain);
+
+  closeModal();
 }
