@@ -400,3 +400,59 @@ a:focus-visible {
     border-radius: 9px;
   }
 }
+
+.modal {
+  position: fixed;
+  inset: 0;
+
+  width: min(420px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+
+  overflow: auto;
+
+  border: 1px solid var(--surface-border);
+  border-radius: 20px;
+
+  background-color: var(--surface-bg);
+  color: var(--text-main);
+
+  box-shadow: 0 12px 40px var(--shadow);
+}
+
+.modal::backdrop {
+  background-color: rgba(40, 30, 20, 0.55);
+}
+
+.modal__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  padding: 28px;
+}
+
+.modal__content {
+  width: 100%;
+  text-align: center;
+}
+
+.modal__close {
+  padding: 10px 24px;
+
+  border: 1px solid var(--button-border);
+  border-radius: 12px;
+
+  background-color: var(--button-bg);
+  color: var(--button-text);
+
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modal__close:hover {
+  background-color: var(--button-bg-hover);
+}

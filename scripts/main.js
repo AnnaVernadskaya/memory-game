@@ -145,6 +145,10 @@ function checkPair() {
     const pairsCounter = document.querySelector('.pair-counter');
     pairsCounter.textContent = state.matchedPairs;
 
+    if (state.matchedPairs === 8) {
+      console.log('Win!');
+    }
+
     state.firstCard = null;
     state.secondCard = null;
   }
@@ -202,3 +206,48 @@ const footer = createFooter();
 
 document.body.prepend(header);
 document.body.append(main, footer);
+
+function createModal() {
+  const modal = document.createElement('dialog');
+  modal.classList.add('modal');
+
+  const modalPanel = document.createElement('div');
+  modalPanel.classList.add('modal__panel');
+
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('modal__content');
+
+  const closeButton = document.createElement('button');
+  closeButton.classList.add('modal__close');
+  closeButton.type = 'button';
+  closeButton.textContent = 'Close';
+  closeButton.addEventListener('click', closeModal);
+
+  modalPanel.append(modalContent, closeButton);
+  modal.append(modalPanel);
+
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  return modal;
+}
+
+function openModal(content) {
+  const modalContent = modal.querySelector('.modal__content');
+  modalContent.replaceChildren(content);
+
+  if (!modal.open) {
+    modal.showModal();
+  }
+}
+
+function closeModal() {
+  modal.close();
+}
+
+const modal = createModal();
+document.body.append(modal);
+
