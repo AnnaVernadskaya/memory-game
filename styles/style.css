@@ -456,3 +456,19 @@ a:focus-visible {
 .modal__close:hover {
   background-color: var(--button-bg-hover);
 }
+
+.win-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.win-content h2 {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.win-content p {
+  font-size: 18px;
+}

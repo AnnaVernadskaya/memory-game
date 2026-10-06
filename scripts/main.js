@@ -146,7 +146,8 @@ function checkPair() {
     pairsCounter.textContent = state.matchedPairs;
 
     if (state.matchedPairs === 8) {
-      console.log('Win!');
+      const winContent = createWinContent();
+      openModal(winContent);
     }
 
     state.firstCard = null;
@@ -251,3 +252,22 @@ function closeModal() {
 const modal = createModal();
 document.body.append(modal);
 
+function createWinContent() {
+  const winContent = document.createElement('div');
+  winContent.classList.add('win-content');
+
+    const title = document.createElement('h2');
+  title.textContent = 'You win!';
+
+    const result = document.createElement('p');
+  result.textContent = `Moves: ${state.moves}`;
+
+  const newGameButton = document.createElement('button');
+  newGameButton.classList.add('button-new-game');
+  newGameButton.type = 'button';
+  newGameButton.textContent = 'New Game';
+
+  winContent.append(title, result, newGameButton);
+
+  return winContent;
+}
