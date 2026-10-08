@@ -150,6 +150,8 @@ function checkPair() {
     pairsCounter.textContent = state.matchedPairs;
 
     if (state.matchedPairs === 8) {
+      saveLeaderboardResult(state.moves);
+
       const winContent = createWinContent();
       openModal(winContent);
     }
@@ -360,3 +362,18 @@ leaderboardButton.addEventListener('click', () => {
 
   openModal(content);
 });
+
+function saveLeaderboardResult(moves) {
+  const results = getLeaderboardResults();
+
+  results.push({
+    moves: moves,
+    date: Date.now(),
+  });
+
+  results.sort((a, b) => a.moves - b.moves || a.date - b.date);
+
+  const bestResults = results.slice(0, 10);
+
+  localStorage.setItem('leaderboardResults', JSON.stringify(bestResults));
+}
