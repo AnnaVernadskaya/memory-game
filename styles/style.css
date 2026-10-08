@@ -472,3 +472,63 @@ a:focus-visible {
 .win-content p {
   font-size: 18px;
 }
+
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.leaderboard h2 {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.leaderboard__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.leaderboard__table th,
+.leaderboard__table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--surface-border);
+  text-align: center;
+}
+
+.leaderboard {
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+  color: #222;
+}
+
+.leaderboard__title {
+  margin: 0 0 20px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.leaderboard__list {
+  margin: 0;
+  padding-left: 32px;
+  list-style-type: decimal;
+}
+
+.leaderboard__item {
+  padding: 10px 8px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.leaderboard__item::marker {
+  font-weight: 600;
+}
+
+.leaderboard__empty {
+  margin: 0;
+  text-align: center;
+}

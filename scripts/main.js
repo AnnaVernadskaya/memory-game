@@ -135,7 +135,7 @@ function createCard(cardData) {
 
 function checkPair() {
   if (state.firstCard.dataset.id !== state.secondCard.dataset.id) {
-    setTimeout(() => {
+    state.closeTimerId = setTimeout(() => {
       state.firstCard.classList.remove('card--open');
       state.secondCard.classList.remove('card--open');
 
@@ -260,10 +260,10 @@ function createWinContent() {
   const winContent = document.createElement('div');
   winContent.classList.add('win-content');
 
-    const title = document.createElement('h2');
+  const title = document.createElement('h2');
   title.textContent = 'You win!';
 
-    const result = document.createElement('p');
+  const result = document.createElement('p');
   result.textContent = `Moves: ${state.moves}`;
 
   const newGameButton = document.createElement('button');
@@ -297,3 +297,66 @@ function startNewGame() {
 
   closeModal();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function createLeaderboardContent(results) {
+    if (results === undefined) {
+    results = [];
+  }
+
+  const content = document.createElement('div');
+  content.classList.add('leaderboard');
+
+  const title = document.createElement('h2');
+  title.classList.add('leaderboard__title');
+  title.textContent = 'Leaderboard';
+  content.append(title);
+
+  if (results.length === 0) {
+    const message = document.createElement('p');
+    message.classList.add('leaderboard__empty');
+    message.textContent = 'No results yet. Complete your first game!';
+    content.append(message);
+
+    return content;
+  }
+
+  const list = document.createElement('ol');
+  list.classList.add('leaderboard__list');
+
+  const bestResults = [...results]
+    .sort((a, b) => a.moves - b.moves || a.date - b.date)
+    .slice(0, 10);
+
+  bestResults.forEach((result) => {
+    const item = document.createElement('li');
+    item.classList.add('leaderboard__item');
+
+const date = new Date(result.date).toLocaleDateString('ru-RU');
+item.textContent = result.moves + ' moves — ' + date;
+
+    list.append(item);
+  });
+
+  content.append(list);
+
+  return content;
+}
+
+const leaderboardButton = document.querySelector('.button-leaders');
+
+leaderboardButton.addEventListener('click', () => {
+  openModal(createLeaderboardContent());
+});
