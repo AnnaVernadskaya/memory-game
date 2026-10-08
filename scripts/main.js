@@ -298,21 +298,8 @@ function startNewGame() {
   closeModal();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 function createLeaderboardContent(results) {
-    if (results === undefined) {
+  if (results === undefined) {
     results = [];
   }
 
@@ -344,8 +331,8 @@ function createLeaderboardContent(results) {
     const item = document.createElement('li');
     item.classList.add('leaderboard__item');
 
-const date = new Date(result.date).toLocaleDateString('ru-RU');
-item.textContent = result.moves + ' moves — ' + date;
+    const date = new Date(result.date).toLocaleDateString('ru-RU');
+    item.textContent = result.moves + ' moves — ' + date;
 
     list.append(item);
   });
@@ -355,8 +342,21 @@ item.textContent = result.moves + ' moves — ' + date;
   return content;
 }
 
+function getLeaderboardResults() {
+  const savedResults = localStorage.getItem('leaderboardResults');
+
+  if (savedResults === null) {
+    return [];
+  }
+
+  return JSON.parse(savedResults);
+}
+
 const leaderboardButton = document.querySelector('.button-leaders');
 
 leaderboardButton.addEventListener('click', () => {
-  openModal(createLeaderboardContent());
+  const results = getLeaderboardResults();
+  const content = createLeaderboardContent(results);
+
+  openModal(content);
 });
