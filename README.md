@@ -1,6 +1,7 @@
-# memory-game# Memory Game — Find a Pair
+## Memory Game — Find a Pair
+Игра на поиск пар.
 
-Игра на поиск пар с акварельными котятами.
+[![Live Demo](https://img.shields.io/badge/demo-online-brightgreen.svg)](https://annavernadskaya.github.io/memory-game/)
 
 ## Правила игры
 
