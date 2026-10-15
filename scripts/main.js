@@ -1,0 +1,379 @@
+import { cardsData } from './cards-data.js';
+
+const state = {
+  firstCard: null,
+  secondCard: null,
+  moves: 0,
+  matchedPairs: 0,
+  closeTimerId: null,
+};
+
+function createHeader() {
+  const header = document.createElement('header');
+  header.classList.add('header');
+
+  const buttonsHeaderActionsWrapper = document.createElement('div');
+  buttonsHeaderActionsWrapper.classList.add('header__actions');
+
+  const buttonNewGame = document.createElement('button');
+  buttonNewGame.classList.add('button-new-game');
+  buttonNewGame.type = 'button';
+  buttonNewGame.textContent = 'New Game';
+
+  buttonNewGame.addEventListener('click', startNewGame);
+
+  const buttonLeaders = document.createElement('button');
+  buttonLeaders.classList.add('button-leaders');
+  buttonLeaders.type = 'button';
+  buttonLeaders.textContent = 'Leaderboard';
+
+  buttonsHeaderActionsWrapper.append(buttonNewGame, buttonLeaders);
+
+  const headerTitle = document.createElement('h1');
+  headerTitle.classList.add('header__title');
+  headerTitle.textContent = 'Find a Pair';
+
+  const headerStatsContainer = document.createElement('div');
+  headerStatsContainer.classList.add('header__stats');
+
+  const counterMovesWrapper = document.createElement('div');
+  counterMovesWrapper.classList.add('counter');
+
+  const counterMovesLabel = document.createElement('span');
+  counterMovesLabel.classList.add('counter__label');
+  counterMovesLabel.textContent = 'Moves:';
+
+  const counterMoveValue = document.createElement('span');
+  counterMoveValue.classList.add('counter__value', 'move-counter');
+  counterMoveValue.textContent = '0';
+
+  counterMovesWrapper.append(counterMovesLabel, counterMoveValue);
+
+  const counterPairsWrapper = document.createElement('div');
+  counterPairsWrapper.classList.add('counter');
+
+  const counterPairsLabel = document.createElement('span');
+  counterPairsLabel.classList.add('counter__label');
+  counterPairsLabel.textContent = 'Pairs:';
+
+  const counterPairValue = document.createElement('span');
+  counterPairValue.classList.add('counter__value', 'pair-counter');
+  counterPairValue.textContent = '0';
+
+  const counterPairTotal = document.createElement('span');
+  counterPairTotal.classList.add('counter__total');
+  counterPairTotal.textContent = '/8';
+
+  counterPairsWrapper.append(
+    counterPairsLabel,
+    counterPairValue,
+    counterPairTotal,
+  );
+
+  headerStatsContainer.append(counterMovesWrapper, counterPairsWrapper);
+
+  header.append(buttonsHeaderActionsWrapper, headerTitle, headerStatsContainer);
+
+  return header;
+}
+
+function createCard(cardData) {
+  const cardItem = document.createElement('li');
+  cardItem.classList.add('cards__item');
+
+  const cardButton = document.createElement('button');
+  cardButton.classList.add('card');
+  cardButton.type = 'button';
+  cardButton.dataset.id = cardData.id;
+
+  const cardBack = document.createElement('span');
+  cardBack.classList.add('card__back');
+
+  const cardBackImg = document.createElement('img');
+  cardBackImg.src = './assets/images/bg-card.png';
+  cardBackImg.alt = '';
+
+  cardBack.append(cardBackImg);
+
+  const cardFront = document.createElement('span');
+  cardFront.classList.add('card__front');
+
+  const cardFrontImg = document.createElement('img');
+  cardFrontImg.src = cardData.image;
+  cardFrontImg.alt = cardData.alt;
+
+  cardFront.append(cardFrontImg);
+
+  cardButton.append(cardBack, cardFront);
+  cardItem.append(cardButton);
+
+  function openCard() {
+    if (cardButton.classList.contains('card--open')) {
+      return;
+    } else if (state.firstCard !== null && state.secondCard !== null) {
+      return;
+    }
+
+    cardButton.classList.add('card--open');
+    if (state.firstCard === null) {
+      state.firstCard = cardButton;
+    } else {
+      state.secondCard = cardButton;
+      state.moves += 1;
+
+      checkPair();
+
+      const movesCounter = document.querySelector('.move-counter');
+      movesCounter.textContent = state.moves;
+    }
+  }
+
+  cardButton.addEventListener('click', openCard);
+
+  return cardItem;
+}
+
+function checkPair() {
+  if (state.firstCard.dataset.id !== state.secondCard.dataset.id) {
+    state.closeTimerId = setTimeout(() => {
+      state.firstCard.classList.remove('card--open');
+      state.secondCard.classList.remove('card--open');
+
+      state.firstCard = null;
+      state.secondCard = null;
+      state.closeTimerId = null;
+    }, 1000);
+  } else {
+    state.matchedPairs += 1;
+
+    const pairsCounter = document.querySelector('.pair-counter');
+    pairsCounter.textContent = state.matchedPairs;
+
+    if (state.matchedPairs === 8) {
+      saveLeaderboardResult(state.moves);
+
+      const winContent = createWinContent();
+      openModal(winContent);
+    }
+
+    state.firstCard = null;
+    state.secondCard = null;
+  }
+}
+
+function createMain(cardsData) {
+  const main = document.createElement('main');
+  main.classList.add('main');
+
+  const cardsList = document.createElement('ul');
+  cardsList.classList.add('cards');
+
+  main.append(cardsList);
+
+  cardsData.forEach((cardData) => {
+    const card = createCard(cardData);
+    cardsList.append(card);
+  });
+
+  return main;
+}
+
+function shuffleCards(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+
+  return arr;
+}
+
+const doubledCards = [...cardsData, ...cardsData];
+const shuffledCards = shuffleCards(doubledCards);
+
+function createFooter() {
+  const footer = document.createElement('footer');
+  footer.classList.add('footer');
+
+  const footerLink = document.createElement('a');
+  footerLink.classList.add('footer-link');
+  footerLink.href = 'https://github.com/AnnaVernadskaya';
+  footerLink.target = '_blank';
+  footerLink.rel = 'noopener noreferrer';
+  footerLink.textContent = '© 2026 Anna Vernadskaya';
+
+  footer.append(footerLink);
+
+  return footer;
+}
+
+const header = createHeader();
+const main = createMain(shuffledCards);
+const footer = createFooter();
+
+document.body.prepend(header);
+document.body.append(main, footer);
+
+function createModal() {
+  const modal = document.createElement('dialog');
+  modal.classList.add('modal');
+
+  const modalPanel = document.createElement('div');
+  modalPanel.classList.add('modal__panel');
+
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('modal__content');
+
+  const closeButton = document.createElement('button');
+  closeButton.classList.add('modal__close');
+  closeButton.type = 'button';
+  closeButton.textContent = 'Close';
+  closeButton.addEventListener('click', closeModal);
+
+  modalPanel.append(modalContent, closeButton);
+  modal.append(modalPanel);
+
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  return modal;
+}
+
+function openModal(content) {
+  const modalContent = modal.querySelector('.modal__content');
+  modalContent.replaceChildren(content);
+
+  if (!modal.open) {
+    modal.showModal();
+  }
+}
+
+function closeModal() {
+  modal.close();
+}
+
+const modal = createModal();
+document.body.append(modal);
+
+function createWinContent() {
+  const winContent = document.createElement('div');
+  winContent.classList.add('win-content');
+
+  const title = document.createElement('h2');
+  title.textContent = 'You win!';
+
+  const result = document.createElement('p');
+  result.textContent = `Moves: ${state.moves}`;
+
+  const newGameButton = document.createElement('button');
+  newGameButton.classList.add('button-new-game');
+  newGameButton.type = 'button';
+  newGameButton.textContent = 'New Game';
+
+  newGameButton.addEventListener('click', startNewGame);
+
+  winContent.append(title, result, newGameButton);
+
+  return winContent;
+}
+
+function startNewGame() {
+  clearTimeout(state.closeTimerId);
+  state.closeTimerId = null;
+
+  state.firstCard = null;
+  state.secondCard = null;
+  state.moves = 0;
+  state.matchedPairs = 0;
+
+  document.querySelector('.move-counter').textContent = '0';
+  document.querySelector('.pair-counter').textContent = '0';
+
+  const newDeck = shuffleCards([...cardsData, ...cardsData]);
+  const newMain = createMain(newDeck);
+
+  document.querySelector('.main').replaceWith(newMain);
+
+  closeModal();
+}
+
+function createLeaderboardContent(results) {
+  if (results === undefined) {
+    results = [];
+  }
+
+  const content = document.createElement('div');
+  content.classList.add('leaderboard');
+
+  const title = document.createElement('h2');
+  title.classList.add('leaderboard__title');
+  title.textContent = 'Leaderboard';
+  content.append(title);
+
+  if (results.length === 0) {
+    const message = document.createElement('p');
+    message.classList.add('leaderboard__empty');
+    message.textContent = 'No results yet. Complete your first game!';
+    content.append(message);
+
+    return content;
+  }
+
+  const list = document.createElement('ol');
+  list.classList.add('leaderboard__list');
+
+  const bestResults = [...results]
+    .sort((a, b) => a.moves - b.moves || a.date - b.date)
+    .slice(0, 10);
+
+  bestResults.forEach((result) => {
+    const item = document.createElement('li');
+    item.classList.add('leaderboard__item');
+
+    const date = new Date(result.date).toLocaleDateString('ru-RU');
+    item.textContent = result.moves + ' moves — ' + date;
+
+    list.append(item);
+  });
+
+  content.append(list);
+
+  return content;
+}
+
+function getLeaderboardResults() {
+  const savedResults = localStorage.getItem('leaderboardResults');
+
+  if (savedResults === null) {
+    return [];
+  }
+
+  return JSON.parse(savedResults);
+}
+
+const leaderboardButton = document.querySelector('.button-leaders');
+
+leaderboardButton.addEventListener('click', () => {
+  const results = getLeaderboardResults();
+  const content = createLeaderboardContent(results);
+
+  openModal(content);
+});
+
+function saveLeaderboardResult(moves) {
+  const results = getLeaderboardResults();
+
+  results.push({
+    moves: moves,
+    date: Date.now(),
+  });
+
+  results.sort((a, b) => a.moves - b.moves || a.date - b.date);
+
+  const bestResults = results.slice(0, 10);
+
+  localStorage.setItem('leaderboardResults', JSON.stringify(bestResults));
+}
